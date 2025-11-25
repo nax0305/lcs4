@@ -1,0 +1,2 @@
+i am the parent (pid: parent), i want to write.
+i am the child (pid: child), i am writing some text.
