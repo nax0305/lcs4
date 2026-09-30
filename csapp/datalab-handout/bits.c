@@ -179,7 +179,7 @@ int isTmax(int x) {
  */
 int allOddBits(int x) {
 	int ao = ((0xAA << 8 | 0xAA) << 8 | 0xAA) << 8 | 0xAA;
-	return !(ao ^ x);
+	return !((x&ao) ^ ao);
 }
 /* 
  * negate - return -x 
@@ -189,7 +189,8 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+	
+	return (~x) + 1;
 }
 //3
 /* 
@@ -202,7 +203,10 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+
+	int xh28bits = x & (~0xF);
+	int x2to4bits = (x & 0xE) >> 1;
+	return !(xh28bits ^ 0x30) & (!(x2to4bits >> 2) | !(x2to4bits ^ 0x4));
 }
 /* 
  * conditional - same as x ? y : z 
@@ -212,17 +216,30 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+	
+	// 如果x是0，!x是1，t就是全0
+	// 如果x是非0，!x是0，t就是全1
+	// 所以将x的两种状态转换为t的两种状态
+	int t = !x + (~0); // 也就是!x - 1
+	return (t & y) | (~t & z);
 }
 /* 
- * isLessOrEqual - if x <= y  then return 1, else return 0 
+ * i)sLessOrEqual - if x <= y  then return 1, else return 0 
  *   Example: isLessOrEqual(4,5) = 1.
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 24
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+	
+	// 先表示y-x，如果小于0，那么返回0，否则返回1		
+	// 会导致考虑不到计算溢出的情况
+	// 所以，需要最高位
+	int h_x = x >> 31;
+	int h_y = y >> 31;
+	int y_x = y + (~x + 1);
+	int highest_y_x = y_x >> 31;
+	return !((h_x | 0) & (h_y & 1)) & !highest_y_x;
 }
 //4
 /* 
