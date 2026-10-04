@@ -239,7 +239,7 @@ int isLessOrEqual(int x, int y) {
 	int h_y = y >> 31;
 	int y_x = y + (~x + 1);
 	int highest_y_x = y_x >> 31;
-	return !((h_x | 0) & (h_y & 1)) & !highest_y_x;
+	return !(!(h_x ^ 0) & (h_y & 1)) & !highest_y_x;
 }
 //4
 /* 
