@@ -251,7 +251,13 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {
-  return 2;
+	// 二分法截断
+	int a = (x>>16) | x;
+	int b = (a>>8) | a;
+	int c = (b>>4) | b;
+	int d = (c>>2) | c;
+	int e = (d>>1) | d;
+	return (e & 1) ^ 1;
 }
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
@@ -266,7 +272,8 @@ int logicalNeg(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
-  return 0;
+	int mbits = 0;
+	return 0;
 }
 //float
 /* 
